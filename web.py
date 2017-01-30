@@ -1,21 +1,17 @@
 from flask import Flask, render_template, request
-import weather
+import yelpapi
 import os
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-	# name = request.values.get('name')
-	address = request.values.get('address')
-	forecast = None
-	if address:
-		forecast = weather.get_weather(address)
+	location = request.values.get('location')
+	term = request.values.get('term')
+	business = None
+	if location:
+		business = yelpapi.get_businesses(location, term)
 	return render_template('index.html',
-		forecast=forecast) 
-
-@app.route("/about")
-def about():
-	return render_template('about.html')
+		business=business)
 
 if __name__ == "__main__":
 	port = int(os.environ.get("PORT", 5000))
